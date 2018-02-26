@@ -1,13 +1,12 @@
 class Api::V1::InvoicesController < Api::V1::BaseController
   def index
-    #puts Item.new(1, "naaaaa", "deeeee")
     respond_with Invoice.all
   end
 
   def simulator
     puts "debut"
-    
-    @invoice = Invoice.new
+
+    @invoice = Invoice.new(:contract_monthly_rent => params[:invoice][:contract_monthly_rent])
     render json: @invoice
   end
 end

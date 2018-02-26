@@ -32,12 +32,12 @@ class Invoice < ApplicationRecord
     total_insurance_fees = (self.broker_excl_tax + self.insurance_excl_tax).round2(2)
 
     #Garant me
-    self.garantme_incl_tax = guarantor_pack_base_price - total_insurance_fees
+    self.garantme_incl_tax = (guarantor_pack_base_price - total_insurance_fees).round2(2)
     self.garantme_vat = (VAT_RACE * self.garantme_incl_tax / (1 + VAT_RACE)).round2(2)
-    self.garantme_excl_tax = self.garantme_incl_tax - self.garantme_vat
+    self.garantme_excl_tax = (self.garantme_incl_tax - self.garantme_vat).round2(2)
 
     #Subtotal
-    self.subtotal_excl_tax = self.insurance_excl_tax + self.broker_excl_tax + self.garantme_excl_tax
+    self.subtotal_excl_tax = (self.insurance_excl_tax + self.broker_excl_tax + self.garantme_excl_tax).round2(2)
     self.subtotal_vat = self.insurance_vat + self.broker_vat + self.garantme_vat
     self.subtotal_incl_tax = self.insurance_incl_tax + self.broker_incl_tax + self.garantme_incl_tax
 

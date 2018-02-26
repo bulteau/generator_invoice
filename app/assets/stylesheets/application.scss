@@ -10,6 +10,33 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- *= require_tree .
- *= require_self
  */
+@import "bootstrap";
+.invoice table{
+  text-align: right;
+}
+.invoice table td[scope], .invoice table th.leftAlign{
+    text-align: left;
+}
+.form-inline{
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.subtotal{
+  font-weight: bold
+}
+.subtotal td{
+  border-color: #000
+}
+.discount{
+  color: #37809f
+}
+.total{
+  font-weight: bold;
+  color: #00cc7e
+}
+.total td{
+  border-color: #00cc7e;
+  border-width: 3px;
+  font-size: 1.1em;
+}

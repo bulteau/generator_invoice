@@ -5,7 +5,7 @@ render() {
 			data
 		} = this.props
 
-
+    console.log(data)
     return (
           <div className="row invoice">
             <table className="table">

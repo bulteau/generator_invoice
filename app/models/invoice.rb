@@ -13,44 +13,49 @@ class Invoice < ApplicationRecord
 
 
   after_initialize do |invoice|
-    #intermediate calculation
-    contract_annual_rent = invoice.contract_monthly_rent.round2(2) * LEASE_DURATION
 
-    #Insurance
-    self.insurance_excl_tax = (contract_annual_rent * INSURANCE_RATE).round2(2)
-    self.insurance_vat = (self.insurance_excl_tax * INSURANCE_VAT_RATE).round2(2)
-    self.insurance_incl_tax = self.insurance_excl_tax + self.insurance_vat
+    #Test input value : is a float and greater than 0
+    if ( invoice.contract_monthly_rent.is_a? Float ) && ( invoice.contract_monthly_rent > 0 )
 
-    #broker
-    self.broker_excl_tax = BROKER_FEE
-    self.broker_vat = (self.broker_excl_tax * INSURANCE_VAT_RATE).round2(2)
-    self.broker_incl_tax = self.broker_excl_tax + self.broker_vat
+      #intermediate calculation
+      contract_annual_rent = invoice.contract_monthly_rent.round2(2) * LEASE_DURATION
 
-    #intermediate calculation
-    #QUESTION : incl or excl tax ?
-    guarantor_pack_base_price = [GARANTME_FIXED_RATE, contract_annual_rent * GARANTME_VARIABLE_RATE].max.round2(2)
-    total_insurance_fees = (self.broker_excl_tax + self.insurance_excl_tax).round2(2)
+      #Insurance
+      self.insurance_excl_tax = (contract_annual_rent * INSURANCE_RATE).round2(2)
+      self.insurance_vat = (self.insurance_excl_tax * INSURANCE_VAT_RATE).round2(2)
+      self.insurance_incl_tax = self.insurance_excl_tax + self.insurance_vat
 
-    #Garant me
-    self.garantme_incl_tax = (guarantor_pack_base_price - total_insurance_fees).round2(2)
-    self.garantme_vat = (VAT_RACE * self.garantme_incl_tax / (1 + VAT_RACE)).round2(2)
-    self.garantme_excl_tax = (self.garantme_incl_tax - self.garantme_vat).round2(2)
+      #broker
+      self.broker_excl_tax = BROKER_FEE
+      self.broker_vat = (self.broker_excl_tax * INSURANCE_VAT_RATE).round2(2)
+      self.broker_incl_tax = self.broker_excl_tax + self.broker_vat
 
-    #Subtotal
-    self.subtotal_excl_tax = (self.insurance_excl_tax + self.broker_excl_tax + self.garantme_excl_tax).round2(2)
-    self.subtotal_vat = self.insurance_vat + self.broker_vat + self.garantme_vat
-    self.subtotal_incl_tax = self.insurance_incl_tax + self.broker_incl_tax + self.garantme_incl_tax
+      #intermediate calculation
+      #QUESTION : incl or excl tax ?
+      guarantor_pack_base_price = [GARANTME_FIXED_RATE, contract_annual_rent * GARANTME_VARIABLE_RATE].max.round2(2)
+      total_insurance_fees = (self.broker_excl_tax + self.insurance_excl_tax).round2(2)
 
-    #Discount
-    self.discount_incl_tax = USER_DISCOUNT
-    self.discount_vat = (VAT_RACE * self.discount_incl_tax / (1 + VAT_RACE)).round2(2)
-    self.discount_excl_tax = self.discount_incl_tax - self.discount_vat
+      #Garant me
+      self.garantme_incl_tax = (guarantor_pack_base_price - total_insurance_fees).round2(2)
+      self.garantme_vat = (VAT_RACE * self.garantme_incl_tax / (1 + VAT_RACE)).round2(2)
+      self.garantme_excl_tax = (self.garantme_incl_tax - self.garantme_vat).round2(2)
 
-    #Total
-    self.total_invoice_excl_tax = (subtotal_excl_tax - discount_excl_tax).round2(2)
-    self.total_invoice_vat = (subtotal_vat - discount_vat).round2(2)
-    self.total_invoice_incl_tax = (subtotal_incl_tax - discount_incl_tax).round2(2)
+      #Subtotal
+      self.subtotal_excl_tax = (self.insurance_excl_tax + self.broker_excl_tax + self.garantme_excl_tax).round2(2)
+      self.subtotal_vat = self.insurance_vat + self.broker_vat + self.garantme_vat
+      self.subtotal_incl_tax = self.insurance_incl_tax + self.broker_incl_tax + self.garantme_incl_tax
 
+      #Discount
+      self.discount_incl_tax = USER_DISCOUNT
+      self.discount_vat = (VAT_RACE * self.discount_incl_tax / (1 + VAT_RACE)).round2(2)
+      self.discount_excl_tax = self.discount_incl_tax - self.discount_vat
+
+      #Total
+      self.total_invoice_excl_tax = (subtotal_excl_tax - discount_excl_tax).round2(2)
+      self.total_invoice_vat = (subtotal_vat - discount_vat).round2(2)
+      self.total_invoice_incl_tax = (subtotal_incl_tax - discount_incl_tax).round2(2)
+
+    end
 
   end
 

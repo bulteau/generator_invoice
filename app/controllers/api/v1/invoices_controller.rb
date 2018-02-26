@@ -4,9 +4,9 @@ class Api::V1::InvoicesController < Api::V1::BaseController
   end
 
   def simulator
-    puts "debut"
-
     @invoice = Invoice.new(:contract_monthly_rent => params[:invoice][:contract_monthly_rent])
     render json: @invoice
   end
+
+  #Add other API methods here
 end

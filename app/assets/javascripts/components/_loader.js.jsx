@@ -1,6 +1,6 @@
 var Loader = createReactClass({
   render() {
     return (
-    <div>loading...</div>
+    <span className="loading">loading...</span>
   )}
 })

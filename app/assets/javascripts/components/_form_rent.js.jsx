@@ -20,7 +20,12 @@ var FormRent = createReactClass({
                       </div>
                     </div>
                   </div>
-                  <button onClick={this.handleClick}  className="btn btn-primary mb-2">Generate</button>
+                  
+                    <button onClick={this.handleClick}  className="btn btn-primary mb-2">Generate</button>
+
+                  <div className="form-group mb-2 mr-sm-2">
+                    { this.props.isLoading ? <Loader/> : ''}
+                  </div>
 
               </div>
             </div>
